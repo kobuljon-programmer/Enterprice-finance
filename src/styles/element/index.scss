@@ -1,0 +1,22 @@
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #0046D1,
+    ),
+    'success': (
+      'base': #10B981,
+    ),
+    'warning': (
+      'base': #F59E0B,
+    ),
+    'danger': (
+      'base': #FC542F,
+    ),
+    'info': (
+      'base': #6B7280,
+    ),
+  ),
+  $button-padding-horizontal: (
+    'default': 20px,
+  ),
+);
