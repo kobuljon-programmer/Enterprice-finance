@@ -1,8 +1,12 @@
 <script setup>
 import { useI18n } from "vue-i18n";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
+import { useIntersectionObserver } from "@vueuse/core";
 
 const { t } = useI18n();
+
+const sectionRef = ref(null);
+const hasAnimated = ref(false);
 
 const stats = ref([
   { value: 0, target: 5, suffix: "+", label: "experience" },
@@ -29,24 +33,20 @@ const animateCounters = () => {
   });
 };
 
-onMounted(() => {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting) {
-        animateCounters();
-        observer.disconnect();
-      }
-    },
-    { threshold: 0.3 }
-  );
-
-  const section = document.querySelector("#about");
-  if (section) observer.observe(section);
-});
+useIntersectionObserver(
+  sectionRef,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting && !hasAnimated.value) {
+      animateCounters();
+      hasAnimated.value = true;
+    }
+  },
+  { threshold: 0.3 }
+);
 </script>
 
 <template>
-  <section id="about" class="py-20 md:py-28 bg-white relative overflow-hidden">
+  <section id="about" ref="sectionRef" class="py-20 md:py-28 bg-white relative overflow-hidden">
     <!-- Decorative elements -->
     <div
       class="absolute top-0 right-0 w-96 h-96 bg-primary-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"

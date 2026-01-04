@@ -4,7 +4,12 @@
       "Bash(npm create:*)",
       "Bash(npm run build:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx nuxi@latest init:*)",
+      "Bash(timeout 30 npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

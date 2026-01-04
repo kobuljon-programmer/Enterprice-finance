@@ -2,19 +2,14 @@
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const { scrollToElement } = useScrollTo()
 
 const scrollToContact = () => {
-  const element = document.querySelector('#contact')
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
+  scrollToElement('#contact')
 }
 
 const scrollToProducts = () => {
-  const element = document.querySelector('#products')
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
+  scrollToElement('#products')
 }
 </script>
 

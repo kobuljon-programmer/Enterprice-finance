@@ -1,9 +1,10 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
-import logoWhite from "@/assets/logos/logo-white.png";
+import logoWhite from "~/assets/logos/logo-white.png";
 
 const { t } = useI18n();
+const { scrollToElement } = useScrollTo();
 
 const currentYear = new Date().getFullYear();
 
@@ -23,10 +24,7 @@ const products = computed(() => [
 ]);
 
 const scrollToSection = (href) => {
-  const element = document.querySelector(href);
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" });
-  }
+  scrollToElement(href);
 };
 </script>
 

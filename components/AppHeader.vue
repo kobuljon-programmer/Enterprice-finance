@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
-import logoBlue from "@/assets/logos/logo-blue.png";
+import logoBlue from "~/assets/logos/logo-blue.png";
 
 const { t, locale } = useI18n();
+const { scrollToElement } = useScrollTo();
 
 const isMenuOpen = ref(false);
 const isScrolled = ref(false);
@@ -20,7 +21,9 @@ const currentLanguage = computed(() => {
 
 const changeLanguage = (code) => {
   locale.value = code;
-  localStorage.setItem("locale", code);
+  if (import.meta.client) {
+    localStorage.setItem("locale", code);
+  }
 };
 
 const navItems = computed(() => [
@@ -32,19 +35,23 @@ const navItems = computed(() => [
 ]);
 
 const scrollToSection = (href) => {
-  const element = document.querySelector(href);
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" });
-  }
+  scrollToElement(href);
   isMenuOpen.value = false;
 };
 
 // Handle scroll for sticky header effect
-if (typeof window !== "undefined") {
-  window.addEventListener("scroll", () => {
-    isScrolled.value = window.scrollY > 20;
-  });
-}
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 20;
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+  handleScroll(); // Check initial state
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>

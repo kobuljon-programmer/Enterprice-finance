@@ -1,4 +1,8 @@
 export default {
+  seo: {
+    title: 'Enterprise Finance - Islamic Financial Solutions',
+    description: 'Enterprise Finance MFO - Islamic financial solutions: from microfinance to large investments. Shariah-compliant financing services.',
+  },
   nav: {
     home: 'Home',
     about: 'About Us',

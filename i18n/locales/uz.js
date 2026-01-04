@@ -1,4 +1,8 @@
 export default {
+  seo: {
+    title: 'Enterprise Finance - Islomiy Moliyaviy Yechimlar',
+    description: 'Enterprise Finance MMT - Islomiy moliyaviy yechimlar: mikromoliyadan katta investitsiyalargacha. Shariatga muvofiq moliyalashtirish xizmatlari.',
+  },
   nav: {
     home: 'Bosh sahifa',
     about: 'Biz haqimizda',

@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 
 const { t } = useI18n()
+const { scrollToElement } = useScrollTo()
 
 const products = ref([
   {
@@ -42,10 +43,7 @@ const products = ref([
 const activeProduct = ref(null)
 
 const scrollToContact = () => {
-  const element = document.querySelector('#contact')
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
+  scrollToElement('#contact')
 }
 </script>
 

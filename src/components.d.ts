@@ -10,7 +10,6 @@ declare module 'vue' {
     AboutSection: typeof import('./components/AboutSection.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     AppHeader: typeof import('./components/AppHeader.vue')['default']
-    ApplicationForm: typeof import('./components/ApplicationForm.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
