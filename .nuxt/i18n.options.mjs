@@ -20,7 +20,8 @@ export const vueI18nConfigs = [
 
 export const nuxtI18nOptions = {
   "experimental": {
-    "localeDetector": ""
+    "localeDetector": "",
+    "jsTsFormatResource": true
   },
   "bundle": {
     "compositionOnly": true,

@@ -1,8 +1,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  // Enable SSR
-  ssr: true,
+  // SSR mode - set to false for Netlify static hosting, true for Node.js server
+  ssr: false,
 
   // Modules
   modules: [
@@ -60,6 +60,10 @@ export default defineNuxtConfig({
     bundle: {
       optimizeTranslationDirective: false,
     },
+    // Required for SSR with .js locale files
+    experimental: {
+      jsTsFormatResource: true,
+    },
   },
 
   // App configuration
@@ -80,12 +84,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // Nitro configuration (prerender disabled for now)
+  // Nitro configuration
+  // Use 'static' for Netlify, 'node-server' for your own hosting
   nitro: {
-    prerender: {
-      crawlLinks: false,
-      routes: [],
-    },
+    preset: 'static',
   },
 
   compatibilityDate: '2024-11-01',
