@@ -80,11 +80,11 @@ export default defineNuxtConfig({
     },
   },
 
-  // Static Site Generation
+  // Nitro configuration (prerender disabled for now)
   nitro: {
     prerender: {
-      crawlLinks: true,
-      routes: ['/'],
+      crawlLinks: false,
+      routes: [],
     },
   },
 
