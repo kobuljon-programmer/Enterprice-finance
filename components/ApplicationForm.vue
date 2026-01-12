@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const currentStep = ref(0);
 const isSubmitting = ref(false);
@@ -131,8 +131,8 @@ const formatPhone = (value) => {
   return formatted;
 };
 
-const handlePhoneInput = (event) => {
-  formData.phone = formatPhone(event.target.value);
+const handlePhoneInput = (value) => {
+  formData.phone = formatPhone(value || "");
 };
 
 const formatAmount = (value) => {
@@ -140,29 +140,46 @@ const formatAmount = (value) => {
   return new Intl.NumberFormat("uz-UZ").format(value);
 };
 
+const productLabel = computed(() => {
+  const selected = products.value.find((p) => p.value === formData.product);
+  return selected?.label || formData.product;
+});
+
 const submitForm = async () => {
   const isValid = await validateStep(2);
   if (!isValid) return;
 
   isSubmitting.value = true;
-
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  isSubmitting.value = false;
-  isSuccess.value = true;
-
-  // Reset form after 3 seconds
-  setTimeout(() => {
-    isSuccess.value = false;
-    currentStep.value = 0;
-    Object.assign(formData, {
-      fullName: "",
-      phone: "",
-      amount: null,
-      product: "",
+  try {
+    await $fetch("/api/lead", {
+      method: "POST",
+      body: {
+        fullName: formData.fullName,
+        phone: formData.phone,
+        amount: Number(formData.amount),
+        productLabel: productLabel.value, // ✅ localized text
+        locale: locale.value,
+        page: window.location.href,
+        website: "", // honeypot keep empty
+      },
     });
-  }, 5000);
+
+    isSuccess.value = true;
+    setTimeout(() => {
+      isSuccess.value = false;
+      currentStep.value = 0;
+      Object.assign(formData, {
+        fullName: "",
+        phone: "",
+        amount: null,
+        product: "",
+      });
+    }, 5000);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
