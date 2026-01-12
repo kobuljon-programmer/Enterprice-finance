@@ -6,12 +6,14 @@ export default defineNuxtConfig({
 
   // Modules
   modules: [
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
   ],
 
-  // CSS - include Tailwind via PostCSS
+  // CSS - include Tailwind and Element Plus
   css: [
+    'element-plus/dist/index.css',
     '~/assets/styles/main.css',
   ],
 

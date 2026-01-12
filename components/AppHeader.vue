@@ -1,9 +1,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useI18n } from "vue-i18n";
 import logoBlue from "~/assets/logos/logo-blue.png";
 
-const { t, locale } = useI18n();
+const { t, locale, setLocale } = useI18n();
 const { scrollToElement } = useScrollTo();
 
 const isMenuOpen = ref(false);
@@ -19,8 +18,8 @@ const currentLanguage = computed(() => {
   return languages.find((lang) => lang.code === locale.value) || languages[0];
 });
 
-const changeLanguage = (code) => {
-  locale.value = code;
+const changeLanguage = async (code) => {
+  await setLocale(code);
   if (import.meta.client) {
     localStorage.setItem("locale", code);
   }
@@ -31,6 +30,7 @@ const navItems = computed(() => [
   { id: "about", label: t("nav.about"), href: "#about" },
   { id: "products", label: t("nav.products"), href: "#products" },
   { id: "roadmap", label: t("nav.roadmap"), href: "#roadmap" },
+  { id: "faq", label: t("nav.faq"), href: "#faq" },
   { id: "contact", label: t("nav.contact"), href: "#contact" },
 ]);
 

@@ -1,5 +1,5 @@
 <script setup>
-const { locale, t } = useI18n()
+const { locale, t, setLocale } = useI18n()
 
 // SEO Meta - reactive based on locale
 useSeoMeta({
@@ -21,10 +21,10 @@ useHead({
 })
 
 // Restore saved locale on client-side
-onMounted(() => {
+onMounted(async () => {
   const savedLocale = localStorage.getItem('locale')
-  if (savedLocale && ['uz', 'ru', 'en'].includes(savedLocale)) {
-    locale.value = savedLocale
+  if (savedLocale && ['uz', 'ru', 'en'].includes(savedLocale) && savedLocale !== locale.value) {
+    await setLocale(savedLocale)
   }
 })
 </script>
@@ -39,6 +39,7 @@ onMounted(() => {
       <ProductsSection />
       <MatrixSection />
       <RoadmapSection />
+      <FAQSection />
       <ApplicationForm />
     </main>
     <AppFooter />

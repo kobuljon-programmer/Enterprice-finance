@@ -1,5 +1,4 @@
 <script setup>
-import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 import logoWhite from "~/assets/logos/logo-white.png";
 

@@ -1,5 +1,4 @@
 <script setup>
-import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 
 const { t } = useI18n();
@@ -40,9 +39,9 @@ const toggleExpand = (id) => {
     <div
       class="absolute top-0 left-0 w-96 h-96 bg-secondary-50 rounded-full blur-3xl opacity-40 -translate-x-1/2 -translate-y-1/2"
     ></div>
-    <di
+    <div
       class="absolute bottom-0 right-0 w-72 h-72 bg-primary-50 rounded-full blur-3xl opacity-50 translate-x-1/2 translate-y-1/2"
-    ></di>
+    ></div>
 
     <div class="container mx-auto px-4 lg:px-8 relative z-10">
       <!-- Header -->

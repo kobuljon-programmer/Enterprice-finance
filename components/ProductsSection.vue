@@ -1,5 +1,4 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 
 const { t } = useI18n()
@@ -41,9 +40,22 @@ const products = ref([
 ])
 
 const activeProduct = ref(null)
+const selectedProductId = ref(null)
+const showProductDetail = ref(false)
 
 const scrollToContact = () => {
   scrollToElement('#contact')
+}
+
+const openProductDetail = (productId) => {
+  selectedProductId.value = productId
+  showProductDetail.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+const closeProductDetail = () => {
+  showProductDetail.value = false
+  document.body.style.overflow = ''
 }
 </script>
 
@@ -110,7 +122,7 @@ const scrollToContact = () => {
           <button
             class="flex items-center text-sm font-semibold transition-all duration-300 group-hover:translate-x-1"
             :class="product.textColor"
-            @click="scrollToContact"
+            @click.stop="openProductDetail(product.id)"
           >
             {{ t('common.learnMore') }}
             <el-icon class="ml-2 transition-transform duration-300 group-hover:translate-x-1"><ArrowRight /></el-icon>
@@ -142,5 +154,13 @@ const scrollToContact = () => {
         </el-button>
       </div>
     </div>
+
+    <!-- Product Detail Modal -->
+    <ProductDetail
+      v-if="selectedProductId"
+      :product-id="selectedProductId"
+      :visible="showProductDetail"
+      @close="closeProductDetail"
+    />
   </section>
 </template>

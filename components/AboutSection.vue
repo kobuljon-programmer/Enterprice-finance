@@ -1,5 +1,4 @@
 <script setup>
-import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import { useIntersectionObserver } from "@vueuse/core";
 
