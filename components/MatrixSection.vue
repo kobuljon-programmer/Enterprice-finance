@@ -139,7 +139,7 @@ const collateralOptions = ref([
 
       <!-- Collateral Options -->
       <div class="mt-12 max-w-4xl mx-auto">
-        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Qabul qilinadigan garov turlari</h3>
+        <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">{{ t('matrix.collateralTypes') }}</h3>
         <div class="grid grid-cols-2 gap-4 md:gap-6">
           <div
             v-for="option in collateralOptions"

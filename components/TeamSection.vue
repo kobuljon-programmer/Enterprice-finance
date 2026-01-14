@@ -1,35 +1,46 @@
 <script setup>
 import { ref } from "vue";
+import mansurImg from "~/assets/ef-team/mansurbek.jpeg";
+import abduxalilImg from "~/assets/ef-team/abduxalil-usmanov.jpeg";
+import qudratbekImg from "~/assets/ef-team/qudratbek.png";
+import azamxonImg from "~/assets/ef-team/azamxon-f.jpeg";
 
 const { t } = useI18n();
 
 const teamMembers = ref([
   {
     id: "mansur",
-    icon: "UserFilled",
+    image: mansurImg,
     color: "primary",
   },
   {
     id: "abduxalil",
-    icon: "UserFilled",
+    image: abduxalilImg,
     color: "secondary",
   },
   {
     id: "qudratbek",
-    icon: "UserFilled",
+    image: qudratbekImg,
     color: "green",
   },
   {
     id: "azamxon",
-    icon: "UserFilled",
+    image: azamxonImg,
     color: "purple",
   },
 ]);
 
-const expandedMember = ref(null);
+const selectedMember = ref(null);
+const modalVisible = ref(false);
 
-const toggleExpand = (id) => {
-  expandedMember.value = expandedMember.value === id ? null : id;
+const openModal = (member) => {
+  selectedMember.value = member;
+  modalVisible.value = true;
+};
+
+const closeModal = () => {
+  modalVisible.value = false;
+  selectedMember.value = null;
 };
 </script>
 
@@ -72,35 +83,24 @@ const toggleExpand = (id) => {
           :key="member.id"
           class="group bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden border border-gray-100"
         >
-          <!-- Photo placeholder -->
-          <div
-            class="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden"
-          >
+          <!-- Team member photo -->
+          <div class="relative h-56 overflow-hidden bg-gradient-to-b from-gray-100 to-gray-50">
+            <img
+              :src="member.image"
+              :alt="t(`team.members.${member.id}.name`)"
+              class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            />
+
+            <!-- Subtle overlay for visual consistency -->
             <div
-              class="absolute inset-0 flex items-center justify-center"
+              class="absolute inset-0 pointer-events-none"
               :class="{
-                'bg-gradient-to-br from-primary-100 to-primary-200':
-                  member.color === 'primary',
-                'bg-gradient-to-br from-secondary-100 to-secondary-200':
-                  member.color === 'secondary',
-                'bg-gradient-to-br from-green-100 to-green-200':
-                  member.color === 'green',
-                'bg-gradient-to-br from-purple-100 to-purple-200':
-                  member.color === 'purple',
+                'bg-gradient-to-b from-primary-500/5 via-transparent to-primary-500/10': member.color === 'primary',
+                'bg-gradient-to-b from-secondary-500/5 via-transparent to-secondary-500/10': member.color === 'secondary',
+                'bg-gradient-to-b from-green-500/5 via-transparent to-green-500/10': member.color === 'green',
+                'bg-gradient-to-b from-purple-500/5 via-transparent to-purple-500/10': member.color === 'purple',
               }"
-            >
-              <div
-                class="w-24 h-24 rounded-full flex items-center justify-center"
-                :class="{
-                  'bg-primary-500': member.color === 'primary',
-                  'bg-secondary-500': member.color === 'secondary',
-                  'bg-green-500': member.color === 'green',
-                  'bg-purple-500': member.color === 'purple',
-                }"
-              >
-                <el-icon class="text-white text-4xl"><UserFilled /></el-icon>
-              </div>
-            </div>
+            ></div>
 
             <!-- Decorative accent -->
             <div
@@ -135,16 +135,13 @@ const toggleExpand = (id) => {
             </p>
 
             <!-- Bio (truncated) -->
-            <p
-              class="text-gray-600 text-sm leading-relaxed transition-all duration-300"
-              :class="expandedMember === member.id ? '' : 'line-clamp-3'"
-            >
+            <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
               {{ t(`team.members.${member.id}.bio`) }}
             </p>
 
-            <!-- Read more button -->
+            <!-- View details button -->
             <button
-              @click="toggleExpand(member.id)"
+              @click="openModal(member)"
               class="mt-4 text-sm font-semibold flex items-center transition-colors"
               :class="{
                 'text-primary-500 hover:text-primary-700':
@@ -156,17 +153,73 @@ const toggleExpand = (id) => {
                   member.color === 'purple',
               }"
             >
-              {{ expandedMember === member.id ? "Yopish" : "Batafsil" }}
-              <el-icon
-                class="ml-1 transition-transform"
-                :class="{ 'rotate-180': expandedMember === member.id }"
-              >
-                <ArrowDown />
+              {{ t("team.viewDetails") }}
+              <el-icon class="ml-1">
+                <ArrowRight />
               </el-icon>
             </button>
           </div>
         </div>
       </div>
+
+      <!-- Team Member Modal -->
+      <el-dialog
+        v-model="modalVisible"
+        :show-close="true"
+        width="90%"
+        class="team-modal"
+        :class="{ 'max-w-2xl': true }"
+        @close="closeModal"
+      >
+        <template v-if="selectedMember">
+          <div class="flex flex-col md:flex-row gap-6">
+            <!-- Member Image -->
+            <div class="md:w-1/3 flex-shrink-0">
+              <div class="relative rounded-2xl overflow-hidden aspect-[3/4]">
+                <img
+                  :src="selectedMember.image"
+                  :alt="t(`team.members.${selectedMember.id}.name`)"
+                  class="w-full h-full object-cover object-top"
+                />
+                <div
+                  class="absolute bottom-0 left-0 right-0 h-1"
+                  :class="{
+                    'bg-primary-500': selectedMember.color === 'primary',
+                    'bg-secondary-500': selectedMember.color === 'secondary',
+                    'bg-green-500': selectedMember.color === 'green',
+                    'bg-purple-500': selectedMember.color === 'purple',
+                  }"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Member Details -->
+            <div class="md:w-2/3">
+              <h3
+                class="text-2xl md:text-3xl font-bold mb-2"
+                :class="{
+                  'text-primary-600': selectedMember.color === 'primary',
+                  'text-secondary-600': selectedMember.color === 'secondary',
+                  'text-green-600': selectedMember.color === 'green',
+                  'text-purple-600': selectedMember.color === 'purple',
+                }"
+              >
+                {{ t(`team.members.${selectedMember.id}.name`) }}
+              </h3>
+
+              <p class="text-gray-500 font-semibold text-lg mb-6">
+                {{ t(`team.members.${selectedMember.id}.position`) }}
+              </p>
+
+              <div class="prose prose-gray max-w-none">
+                <p class="text-gray-600 leading-relaxed">
+                  {{ t(`team.members.${selectedMember.id}.bio`) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+      </el-dialog>
 
       <!-- Bottom decoration -->
       <div class="mt-16 text-center">
@@ -174,32 +227,19 @@ const toggleExpand = (id) => {
           class="inline-flex items-center space-x-4 bg-gradient-to-r from-primary-50 via-secondary-50 to-primary-50 rounded-full px-8 py-4"
         >
           <div class="flex -space-x-3">
-            <div
-              class="w-10 h-10 rounded-full bg-primary-500 border-2 border-white flex items-center justify-center"
-            >
-              <el-icon class="text-white text-sm"><UserFilled /></el-icon>
-            </div>
-            <div
-              class="w-10 h-10 rounded-full bg-secondary-500 border-2 border-white flex items-center justify-center"
-            >
-              <el-icon class="text-white text-sm"><UserFilled /></el-icon>
-            </div>
-            <div
-              class="w-10 h-10 rounded-full bg-green-500 border-2 border-white flex items-center justify-center"
-            >
-              <el-icon class="text-white text-sm"><UserFilled /></el-icon>
-            </div>
-            <div
-              class="w-10 h-10 rounded-full bg-purple-500 border-2 border-white flex items-center justify-center"
-            >
-              <el-icon class="text-white text-sm"><UserFilled /></el-icon>
-            </div>
+            <img
+              v-for="member in teamMembers"
+              :key="'avatar-' + member.id"
+              :src="member.image"
+              :alt="t(`team.members.${member.id}.name`)"
+              class="w-10 h-10 rounded-full border-2 border-white object-cover object-top"
+            />
           </div>
           <div class="text-left">
             <p class="text-sm font-semibold text-gray-900">
-              Professional jamoa
+              {{ t('team.professionalTeam') }}
             </p>
-            <p class="text-xs text-gray-500">25+ yillik umumiy tajriba</p>
+            <p class="text-xs text-gray-500">{{ t('team.totalExperience') }}</p>
           </div>
         </div>
       </div>
@@ -213,5 +253,28 @@ const toggleExpand = (id) => {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+</style>
+
+<style>
+.team-modal .el-dialog {
+  max-width: 700px;
+  border-radius: 1rem;
+}
+
+.team-modal .el-dialog__header {
+  padding: 1rem 1.5rem 0;
+}
+
+.team-modal .el-dialog__body {
+  padding: 1.5rem;
+}
+
+.team-modal .el-dialog__headerbtn {
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.25rem;
 }
 </style>

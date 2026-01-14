@@ -2,7 +2,6 @@
 /// <reference types="@nuxtjs/tailwindcss" />
 /// <reference types="@nuxtjs/i18n" />
 /// <reference types="@vueuse/nuxt" />
-/// <reference types="@nuxt/devtools" />
 /// <reference types="@nuxt/telemetry" />
 /// <reference types="nuxt" />
 /// <reference path="types/plugins.d.ts" />

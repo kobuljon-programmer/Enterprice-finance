@@ -4,8 +4,11 @@ import { join } from 'node:path';
 import { mkdirSync } from 'node:fs';
 import { parentPort, threadId } from 'node:worker_threads';
 import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, fetchWithEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, createError, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, readBody, getQuery as getQuery$1, getResponseStatusText } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/h3/dist/index.mjs';
+import { google } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/googleapis/build/src/index.js';
+import { z } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/zod/index.js';
 import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { stringify, uneval } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/devalue/index.js';
+import { renderToString } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/vue/server-renderer/index.mjs';
 import { renderSSRHead } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/@unhead/ssr/dist/index.mjs';
 import { createFetch as createFetch$1, Headers as Headers$1 } from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/ofetch/dist/node.mjs';
 import destr from 'file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/node_modules/destr/dist/index.mjs';
@@ -111,7 +114,13 @@ const _inlineRuntimeConfig = {
         }
       }
     }
-  }
+  },
+  "GOOGLE_SHEETS_SPREADSHEET_ID": "16dnEsDDav9hCZhxOwFcIa_EHC9v3iL8xcYCXeULiaYo",
+  "GOOGLE_SHEETS_TAB_NAME": "Leads",
+  "GOOGLE_SERVICE_ACCOUNT_EMAIL": "nuxt-leads-writer@enterpricefinance.iam.gserviceaccount.com",
+  "GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDM3Ro5D4vLY+Sq\\n2viVHQ/CXH9r++70weoa0wyvnlppJ9392BI7pyBJYlIZMv+Hg9CtavYkikQvxGh+\\nYXv3nrWXr9h+3iRRP2gWNTPWQwjKqCrAy3aUbECkEekeGy/VJnIdBaPQo+p32vAt\\nI0QNCBw8gOzdAGpz4p2+VdkO/yskNj+JvoKYc2FkGjNkLxrcT3u5oGoBM8YzLL6+\\ni9bunh6y0xI1MH77Akz11G1rbnWM76KxtNQifqCjcLSXlSeQv5+6F+dt8tfBKsa8\\nP/pFd92BzmDr1YTWoYRtfEwWUQio9Uaq94+oc+H1aIXzE8aHh4cD+mB/2TQShZKZ\\nxgxklbBdAgMBAAECggEADOOCNqx64TvH01SocV/dMcoLqDm28cYmGjREpuM3EUjq\\np1b0kAqL4PdjGTvDUNLNtQNhjgX26UHESI3jNJPTHUJ5GUOU6a8BYkL29Rgi5vZy\\njiOe3RKnHyC+AmC31INb3ZCRGwYdBm0LUZkCOzGomR6MCGbHdm1U+vhqtLiquFc7\\nuerXzTfK5anrZ4ntiKTowx7OECTCPxCj9uSnj+fdkw4MzKf7W6mbCX6CrroRlbqm\\nhAZDy3rgxeBr7vtV4DXXrFXlwr1PqlW8B93uVUTFVgq54LjD0y4n3Zt9jGXYsp9t\\nPvhUhsXp12xgXYitWEOdJ5xAjmeqkgeJwxdUiPiScQKBgQD/8MLkDmtz2sDZqhFb\\nK1Yi/6t8N4zfVutQVaOYk7tA5tsjaP0YQbcT++msQ0o6w4/08R45QZh6w5RKKG7Q\\n+QzGSdn06qozUIwIDBpYiH2HQ8gGquDDa6fXFTN6WwL9folKOpOHUuXPDNEku70Y\\nPFlB56mpsED1IlbhKZlAR4njxQKBgQDM6UzOhOxtDtxCXR5ViWV1U5b/rBvp8daY\\nq0hOoPUMkyZqNLLOLKqT4KTnmGmVYCFGdSzUCUQs1/QP/O6iHroXAi+uhzDbrdMX\\n9EqKiS3065lPWaM7F+xV7dUzjFd2+TLndancflceYmJuf44M44Gg35alZ/dN7kLi\\nfXy3utYruQKBgQCNHgvnQMggZgIlQa82LIve2keMQvjKgBtY/Q8p5nK900wKly3N\\nvRYbz69EywlXo1JxhKzcdv2C2umdhfOsB1Xy0u95KhZUGtpK6ZlxLTjBZy8X9gnd\\n1jMB1W+/zAS3DpjWM7v6RkvtwKxka5tUjJnOS9RxenwmbRuoJI6aMZem3QKBgDeW\\ntupzrvvrAx/RyS/lRSvuEFGt7CisHc5u8P+7tJ7DsLExOKyr+16Am9vkQghu+rf1\\ng8LF/MO5lhFcSZSbh1pEkpDjRgLihhjCghJRIrGF1KJtK9YVKF0rVyJT2UqCUifu\\niLUzZQjuIcveOLgQZBMzdNfMe4+dqnFtH49sVTupAoGBAIlMk0y1sjXUnm7OnPbN\\n5vrlhutwF3lYUmjB7y3CgLGAHS+R4fXnDaWwTUc+Gygivq9HCcC/HDa8X9UW6/B4\\nbRWDuMg2y1FcN441LSSt9DIHgrcPzq2uWEDLq1pHcqHxq6fr0yZZntKFrB511YR6\\nnKEn3bP/i1soCPWXY180n01y\\n-----END PRIVATE KEY-----",
+  "TELEGRAM_BOT_TOKEN": "8036380839:AAHqp7e9orpSoOGQ7oonQE_25fOw-PQwTO8",
+  "TELEGRAM_CHAT_ID": "-5180388573"
 };
 const envOptions = {
   prefix: "NITRO_",
@@ -798,25 +807,8 @@ function getRouteRulesForPath(path) {
   return defu({}, ..._routeRulesMatcher.matchAll(path).reverse());
 }
 
-const script = `
-if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
-  Object.defineProperty(window, '__NUXT_DEVTOOLS_TIME_METRIC__', {
-    value: {},
-    enumerable: false,
-    configurable: true,
-  })
-}
-window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
-`;
-
-const _AbLrgSmWSo = (function(nitro) {
-  nitro.hooks.hook("render:html", (htmlContext) => {
-    htmlContext.head.push(`<script>${script}<\/script>`);
-  });
-});
-
 const plugins = [
-  _AbLrgSmWSo
+  
 ];
 
 const scheduledTasks = false;
@@ -946,9 +938,13 @@ const errorHandler = (async function errorhandler(error, event) {
   return send(event, html);
 });
 
+const _lazy_PijCyE = () => Promise.resolve().then(function () { return lead_post$1; });
+const _lazy_OGr9rD = () => Promise.resolve().then(function () { return ping_get$1; });
 const _lazy_T4VEkL = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
+  { route: '/api/lead', handler: _lazy_PijCyE, lazy: true, middleware: false, method: "post" },
+  { route: '/api/ping', handler: _lazy_OGr9rD, lazy: true, middleware: false, method: "get" },
   { route: '/__nuxt_error', handler: _lazy_T4VEkL, lazy: true, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_T4VEkL, lazy: true, middleware: false, method: undefined }
 ];
@@ -1160,6 +1156,154 @@ const errorDev = /*#__PURE__*/Object.freeze({
   template: template$1
 });
 
+const LeadSchema = z.object({
+  fullName: z.string().min(3),
+  phone: z.string().min(7),
+  amount: z.number().min(3e8).max(1e9),
+  productLabel: z.string().min(1),
+  // localized
+  locale: z.string().optional(),
+  page: z.string().optional(),
+  website: z.string().optional()
+  // honeypot
+});
+function getClientIp(event) {
+  var _a;
+  const xf = event.node.req.headers["x-forwarded-for"];
+  if (typeof xf === "string" && xf.length)
+    return xf.split(",")[0].trim();
+  return ((_a = event.node.req.socket) == null ? void 0 : _a.remoteAddress) || "";
+}
+async function appendToSheet(opts) {
+  const jwt = new google.auth.JWT({
+    email: opts.serviceAccountEmail,
+    key: opts.privateKey,
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+  });
+  const sheets = google.sheets({ version: "v4", auth: jwt });
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: opts.spreadsheetId,
+    range: `${opts.tabName}!A1`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: [opts.row] }
+  });
+}
+async function sendTelegram(token, chatId, text) {
+  await $fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: "POST",
+    body: { chat_id: chatId, text, disable_web_page_preview: true }
+  });
+}
+const lead_post = defineEventHandler(async (event) => {
+  const body = await readBody(event);
+  const parsed = LeadSchema.safeParse(body);
+  if (!parsed.success) {
+    setResponseStatus(event, 400);
+    return { ok: false, message: "Invalid data", issues: parsed.error.issues };
+  }
+  const data = parsed.data;
+  if (data.website && data.website.trim().length > 0) {
+    return { ok: true };
+  }
+  const ip = getClientIp(event);
+  const storage = useStorage("cache");
+  const rlKey = `lead_rl_${ip}`;
+  const last = await storage.getItem(rlKey);
+  const now = Date.now();
+  if (last && now - last < 3e4) {
+    setResponseStatus(event, 429);
+    return { ok: false, message: "Too many requests" };
+  }
+  await storage.setItem(rlKey, now);
+  const config = useRuntimeConfig();
+  const spreadsheetId = config.GOOGLE_SHEETS_SPREADSHEET_ID;
+  const tabName = config.GOOGLE_SHEETS_TAB_NAME;
+  const saEmail = config.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const privateKeyRaw = config.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
+  const tgToken = config.TELEGRAM_BOT_TOKEN;
+  const tgChatId = config.TELEGRAM_CHAT_ID;
+  if (!spreadsheetId || !tabName || !saEmail || !privateKeyRaw) {
+    setResponseStatus(event, 500);
+    return { ok: false, message: "Server not configured (Google Sheets)" };
+  }
+  let privateKey = String(privateKeyRaw);
+  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+    privateKey = privateKey.slice(1, -1);
+  }
+  if (privateKey.startsWith("'") && privateKey.endsWith("'")) {
+    privateKey = privateKey.slice(1, -1);
+  }
+  privateKey = privateKey.replace(/\\n/g, "\n");
+  const currentDate = /* @__PURE__ */ new Date();
+  const timestamp = currentDate.toLocaleString("uz-UZ", {
+    timeZone: "Asia/Tashkent",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  });
+  const phoneText = "'" + data.phone;
+  const formattedAmount = data.amount.toLocaleString("ru-RU").replace(/\s/g, " ");
+  try {
+    await appendToSheet({
+      spreadsheetId,
+      tabName,
+      serviceAccountEmail: saEmail,
+      privateKey,
+      row: [
+        timestamp,
+        data.fullName,
+        phoneText,
+        formattedAmount,
+        data.productLabel,
+        data.locale || "",
+        data.page || "",
+        ip
+      ]
+    });
+  } catch (e) {
+    console.error("appendToSheet failed:", e && e.message ? e.message : e);
+    setResponseStatus(event, 500);
+    return {
+      ok: false,
+      message: "Failed to save to Google Sheets",
+      error: (e == null ? void 0 : e.message) || String(e)
+    };
+  }
+  if (tgToken && tgChatId) {
+    const text = `\u{1F195} New lead
+
+\u{1F464} ${data.fullName}
+\u{1F4DE} ${data.phone}
+\u{1F4B0} ${formattedAmount} UZS
+\u{1F4E6} ${data.productLabel}
+\u{1F310} ${data.page || "-"}`;
+    try {
+      await sendTelegram(String(tgToken), String(tgChatId), text);
+    } catch (e) {
+      console.error("sendTelegram failed:", e && e.message ? e.message : e);
+    }
+  }
+  return { ok: true };
+});
+
+const lead_post$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: lead_post
+});
+
+const ping_get = defineEventHandler(() => {
+  return { ok: true, message: "Nitro backend is working" };
+});
+
+const ping_get$1 = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  default: ping_get
+});
+
 const Vue3 = version[0] === "3";
 
 function resolveUnref(r) {
@@ -1242,6 +1386,31 @@ function publicAssetsURL(...path) {
 globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;
 const getClientManifest = () => import('file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file:///Users/kobuljonrasuljonov/EnterPriceFinanceForClaude/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
+const getSSRRenderer = lazyCachedFunction(async () => {
+  const manifest = await getClientManifest();
+  if (!manifest) {
+    throw new Error("client.manifest is not available");
+  }
+  const createSSRApp = await getServerEntry();
+  if (!createSSRApp) {
+    throw new Error("Server bundle is not available");
+  }
+  const options = {
+    manifest,
+    renderToString: renderToString$1,
+    buildAssetsURL
+  };
+  const renderer = createRenderer(createSSRApp, options);
+  async function renderToString$1(input, context) {
+    const html = await renderToString(input, context);
+    if (process.env.NUXT_VITE_NODE_OPTIONS) {
+      renderer.rendererContext.updateManifest(await getClientManifest());
+    }
+    return `<${appRootTag}${` id="${appRootId}"` }>${html}</${appRootTag}>`;
+  }
+  return renderer;
+});
 const getSPARenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   const spaTemplate = await Promise.resolve().then(function () { return _virtual__spaTemplate; }).then((r) => r.template).catch(() => "");
@@ -1308,7 +1477,7 @@ const renderer = defineRenderHandler(async (event) => {
     url,
     event,
     runtimeConfig: useRuntimeConfig(),
-    noSSR: true,
+    noSSR: event.context.nuxt?.noSSR || routeOptions.ssr === false && !isRenderingIsland || (false),
     head,
     error: !!ssrError,
     nuxt: void 0,
@@ -1324,7 +1493,7 @@ const renderer = defineRenderHandler(async (event) => {
     },
     islandContext
   };
-  const renderer = await getSPARenderer() ;
+  const renderer = ssrContext.noSSR ? await getSPARenderer() : await getSSRRenderer();
   const _rendered = await renderer.renderToString(ssrContext).catch(async (error) => {
     if (ssrContext._renderResponse && error.message === "skipping render") {
       return {};
@@ -1450,7 +1619,7 @@ function renderPayloadJsonScript(opts) {
     type: "application/json",
     id: opts.id,
     innerHTML: contents,
-    "data-ssr": false
+    "data-ssr": !(opts.ssrContext.noSSR)
   };
   if (opts.src) {
     payload["data-src"] = opts.src;

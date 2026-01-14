@@ -18,6 +18,22 @@ export default {
     description: 'Grow your business with Shariah-compliant financing services',
     cta: 'Apply Now',
     learnMore: 'Learn More',
+    annualRate: '24% annual',
+    responseTime: '24 hours',
+    card: {
+      financing: 'Financing',
+      type: 'Type',
+      term: 'Term',
+      months: '12 months',
+      markup: 'Markup',
+      successfulProjects: '1000+ successful projects',
+      status: 'Status',
+      approved: 'Approved',
+      applicationReview: 'Application review',
+    },
+    badge: 'Islamic Finance',
+    shariahCompliant: 'Shariah Compliant',
+    officialLicense: 'Official License',
   },
   about: {
     title: 'About Us',
@@ -30,6 +46,9 @@ export default {
     clientsText: 'Satisfied clients',
     trust: 'Trust',
     trustText: 'Based on Islamic finance principles',
+    fastService: 'Fast Service',
+    fastServiceDesc: 'Application review within 24 hours',
+    clientTrust: 'Client Trust',
   },
   products: {
     title: 'Our Products',
@@ -289,6 +308,7 @@ export default {
         },
       },
     },
+    consultation: 'Which product suits you? Consult with us!',
   },
   matrix: {
     title: 'Financing Terms',
@@ -303,6 +323,7 @@ export default {
     collateralValue: 'Non-residential property or Vehicles',
     property: 'Non-residential property',
     vehicles: 'Vehicles',
+    collateralTypes: 'Accepted Collateral Types',
   },
   roadmap: {
     title: 'Murabaha Process',
@@ -369,6 +390,18 @@ export default {
     },
     next: 'Next',
     prev: 'Back',
+    features: {
+      fastReview: 'Fast Review',
+      fastReviewDesc: 'Get response within 24 hours',
+      freeConsultation: 'Free Consultation',
+      freeConsultationDesc: 'Our specialists will help you',
+      secureData: 'Secure Data',
+      secureDataDesc: 'Your information is protected',
+    },
+    contactInfo: {
+      title: 'Contact Us',
+      address: 'Tashkent, Amir Temur Street',
+    },
   },
   footer: {
     description: 'A microfinance organization in Uzbekistan based on Islamic finance principles',
@@ -382,6 +415,9 @@ export default {
   team: {
     title: 'Our Team',
     subtitle: 'Our professional team',
+    viewDetails: 'View Details',
+    professionalTeam: 'Professional Team',
+    totalExperience: '25+ years of combined experience',
     members: {
       mansur: {
         name: 'Mansur Mukhiddinov',

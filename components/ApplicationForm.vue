@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const currentStep = ref(0);
 const isSubmitting = ref(false);
@@ -131,38 +131,68 @@ const formatPhone = (value) => {
   return formatted;
 };
 
-const handlePhoneInput = (event) => {
-  formData.phone = formatPhone(event.target.value);
+const handlePhoneInput = (value) => {
+  formData.phone = formatPhone(value || "");
 };
 
-const formatAmount = (value) => {
-  if (!value) return "";
-  return new Intl.NumberFormat("uz-UZ").format(value);
+const formattedAmount = ref("");
+
+const handleAmountInput = (value) => {
+  // Remove all non-digits
+  const digits = value.replace(/\D/g, "");
+  // Store raw number
+  formData.amount = digits ? Number(digits) : null;
+  // Format for display with spaces as thousand separators
+  formattedAmount.value = digits ? Number(digits).toLocaleString("ru-RU").replace(/,/g, " ") : "";
 };
+
+const formatAmountForSheet = (value) => {
+  if (!value) return "";
+  // Format as readable number with spaces: 300 000 000
+  return Number(value).toLocaleString("ru-RU").replace(/,/g, " ");
+};
+
+const productLabel = computed(() => {
+  const selected = products.value.find((p) => p.value === formData.product);
+  return selected?.label || formData.product;
+});
 
 const submitForm = async () => {
   const isValid = await validateStep(2);
   if (!isValid) return;
 
   isSubmitting.value = true;
-
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  isSubmitting.value = false;
-  isSuccess.value = true;
-
-  // Reset form after 3 seconds
-  setTimeout(() => {
-    isSuccess.value = false;
-    currentStep.value = 0;
-    Object.assign(formData, {
-      fullName: "",
-      phone: "",
-      amount: null,
-      product: "",
+  try {
+    await $fetch("/api/lead", {
+      method: "POST",
+      body: {
+        fullName: formData.fullName,
+        phone: formData.phone,
+        amount: Number(formData.amount),
+        productLabel: productLabel.value, // ✅ localized text
+        locale: locale.value,
+        page: window.location.href,
+        website: "", // honeypot keep empty
+      },
     });
-  }, 5000);
+
+    isSuccess.value = true;
+    setTimeout(() => {
+      isSuccess.value = false;
+      currentStep.value = 0;
+      formattedAmount.value = "";
+      Object.assign(formData, {
+        fullName: "",
+        phone: "",
+        amount: null,
+        product: "",
+      });
+    }, 5000);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
@@ -212,9 +242,9 @@ const submitForm = async () => {
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900">
-                  Tezkor ko'rib chiqish
+                  {{ t('form.features.fastReview') }}
                 </h4>
-                <p class="text-sm text-gray-600">24 soat ichida javob olasiz</p>
+                <p class="text-sm text-gray-600">{{ t('form.features.fastReviewDesc') }}</p>
               </div>
             </div>
 
@@ -225,9 +255,9 @@ const submitForm = async () => {
                 <el-icon class="text-primary-600 text-xl"><Phone /></el-icon>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900">Bepul maslahat</h4>
+                <h4 class="font-semibold text-gray-900">{{ t('form.features.freeConsultation') }}</h4>
                 <p class="text-sm text-gray-600">
-                  Mutaxassislarimiz yordam beradi
+                  {{ t('form.features.freeConsultationDesc') }}
                 </p>
               </div>
             </div>
@@ -239,9 +269,9 @@ const submitForm = async () => {
                 <el-icon class="text-secondary-600 text-xl"><Lock /></el-icon>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900">Xavfsiz ma'lumotlar</h4>
+                <h4 class="font-semibold text-gray-900">{{ t('form.features.secureData') }}</h4>
                 <p class="text-sm text-gray-600">
-                  Sizning ma'lumotlaringiz himoyalangan
+                  {{ t('form.features.secureDataDesc') }}
                 </p>
               </div>
             </div>
@@ -251,7 +281,7 @@ const submitForm = async () => {
           <div
             class="bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl p-6 text-white"
           >
-            <h4 class="font-bold mb-4 text-secondary-100">Bog'lanish uchun</h4>
+            <h4 class="font-bold mb-4 text-secondary-100">{{ t('form.contactInfo.title') }}</h4>
             <div class="space-y-3">
               <a
                 href="tel:+998712000000"
@@ -269,7 +299,7 @@ const submitForm = async () => {
               </a>
               <div class="flex items-center space-x-3">
                 <el-icon><Location /></el-icon>
-                <span>Toshkent sh., Amir Temur ko'chasi</span>
+                <span>{{ t('form.contactInfo.address') }}</span>
               </div>
             </div>
           </div>
@@ -418,17 +448,16 @@ const submitForm = async () => {
                   label-position="top"
                 >
                   <el-form-item :label="t('form.amount')" prop="amount">
-                    <el-input-number
-                      v-model="formData.amount"
+                    <el-input
+                      v-model="formattedAmount"
                       :placeholder="t('form.amountPlaceholder')"
-                      :min="300000000"
-                      :max="1000000000"
-                      :step="50000000"
-                      :formatter="formatAmount"
                       size="large"
-                      class="!w-full"
-                      controls-position="right"
-                    />
+                      @input="handleAmountInput"
+                    >
+                      <template #prefix>
+                        <span class="text-gray-400">UZS</span>
+                      </template>
+                    </el-input>
                   </el-form-item>
 
                   <el-form-item :label="t('form.product')" prop="product">
