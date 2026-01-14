@@ -101,7 +101,25 @@ export default defineEventHandler(async (event) => {
   }
   // Convert literal \n to actual newlines
   privateKey = privateKey.replace(/\\n/g, "\n");
-  const timestamp = new Date().toISOString();
+
+  // Format timestamp as readable date/time (Uzbekistan timezone UTC+5)
+  const currentDate = new Date();
+  const timestamp = currentDate.toLocaleString('uz-UZ', {
+    timeZone: 'Asia/Tashkent',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  // Prefix phone with apostrophe to force text (prevents #ERROR! from + sign)
+  const phoneText = "'" + data.phone;
+
+  // Format amount with spaces for readability (e.g., 300 000 000)
+  const formattedAmount = data.amount.toLocaleString("ru-RU").replace(/\s/g, " ");
   // Try to append to Google Sheets and notify Telegram; surface helpful errors
   try {
     await appendToSheet({
@@ -112,8 +130,8 @@ export default defineEventHandler(async (event) => {
       row: [
         timestamp,
         data.fullName,
-        data.phone,
-        data.amount,
+        phoneText,
+        formattedAmount,
         data.productLabel,
         data.locale || "",
         data.page || "",
@@ -136,7 +154,7 @@ export default defineEventHandler(async (event) => {
       "🆕 New lead\n\n" +
       `👤 ${data.fullName}\n` +
       `📞 ${data.phone}\n` +
-      `💰 ${data.amount}\n` +
+      `💰 ${formattedAmount} UZS\n` +
       `📦 ${data.productLabel}\n` +
       `🌐 ${data.page || "-"}`;
 

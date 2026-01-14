@@ -1234,7 +1234,19 @@ const lead_post = defineEventHandler(async (event) => {
     privateKey = privateKey.slice(1, -1);
   }
   privateKey = privateKey.replace(/\\n/g, "\n");
-  const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+  const currentDate = /* @__PURE__ */ new Date();
+  const timestamp = currentDate.toLocaleString("uz-UZ", {
+    timeZone: "Asia/Tashkent",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  });
+  const phoneText = "'" + data.phone;
+  const formattedAmount = data.amount.toLocaleString("ru-RU").replace(/\s/g, " ");
   try {
     await appendToSheet({
       spreadsheetId,
@@ -1244,8 +1256,8 @@ const lead_post = defineEventHandler(async (event) => {
       row: [
         timestamp,
         data.fullName,
-        data.phone,
-        data.amount,
+        phoneText,
+        formattedAmount,
         data.productLabel,
         data.locale || "",
         data.page || "",
@@ -1266,7 +1278,7 @@ const lead_post = defineEventHandler(async (event) => {
 
 \u{1F464} ${data.fullName}
 \u{1F4DE} ${data.phone}
-\u{1F4B0} ${data.amount}
+\u{1F4B0} ${formattedAmount} UZS
 \u{1F4E6} ${data.productLabel}
 \u{1F310} ${data.page || "-"}`;
     try {

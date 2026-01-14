@@ -132,9 +132,9 @@ useIntersectionObserver(
                 /></el-icon>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900 mb-1">Tezkor xizmat</h4>
+                <h4 class="font-semibold text-gray-900 mb-1">{{ t('about.fastService') }}</h4>
                 <p class="text-sm text-gray-600">
-                  24 soat ichida arizani ko'rib chiqish
+                  {{ t('about.fastServiceDesc') }}
                 </p>
               </div>
             </div>
@@ -207,7 +207,7 @@ useIntersectionObserver(
               </div>
               <div>
                 <p class="text-2xl font-bold text-gray-900">100%</p>
-                <p class="text-sm text-gray-500">Mijozlar ishonchi</p>
+                <p class="text-sm text-gray-500">{{ t('about.clientTrust') }}</p>
               </div>
             </div>
           </div>

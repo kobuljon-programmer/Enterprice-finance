@@ -18,6 +18,22 @@ export default {
     description: 'Развивайте свой бизнес с помощью финансовых услуг, соответствующих шариату',
     cta: 'Подать заявку сейчас',
     learnMore: 'Подробнее',
+    annualRate: '24% годовых',
+    responseTime: '24 часа',
+    card: {
+      financing: 'Финансирование',
+      type: 'Тип',
+      term: 'Срок',
+      months: '12 месяцев',
+      markup: 'Наценка',
+      successfulProjects: '1000+ успешных проектов',
+      status: 'Статус',
+      approved: 'Одобрено',
+      applicationReview: 'Рассмотрение заявки',
+    },
+    badge: 'Исламские финансы',
+    shariahCompliant: 'Соответствует шариату',
+    officialLicense: 'Официальная лицензия',
   },
   about: {
     title: 'О нас',
@@ -30,6 +46,9 @@ export default {
     clientsText: 'Довольных клиентов',
     trust: 'Доверие',
     trustText: 'На основе принципов исламских финансов',
+    fastService: 'Быстрое обслуживание',
+    fastServiceDesc: 'Рассмотрение заявки в течение 24 часов',
+    clientTrust: 'Доверие клиентов',
   },
   products: {
     title: 'Наши продукты',
@@ -289,6 +308,7 @@ export default {
         },
       },
     },
+    consultation: 'Какой продукт вам подходит? Проконсультируйтесь с нами!',
   },
   matrix: {
     title: 'Условия финансирования',
@@ -303,6 +323,7 @@ export default {
     collateralValue: 'Нежилая недвижимость или Автотранспорт',
     property: 'Нежилая недвижимость',
     vehicles: 'Автотранспорт',
+    collateralTypes: 'Принимаемые виды залога',
   },
   roadmap: {
     title: 'Процесс Мурабаха',
@@ -369,6 +390,18 @@ export default {
     },
     next: 'Далее',
     prev: 'Назад',
+    features: {
+      fastReview: 'Быстрое рассмотрение',
+      fastReviewDesc: 'Ответ в течение 24 часов',
+      freeConsultation: 'Бесплатная консультация',
+      freeConsultationDesc: 'Наши специалисты помогут вам',
+      secureData: 'Безопасность данных',
+      secureDataDesc: 'Ваши данные защищены',
+    },
+    contactInfo: {
+      title: 'Контакты',
+      address: 'г. Ташкент, ул. Амира Темура',
+    },
   },
   footer: {
     description: 'Микрофинансовая организация в Узбекистане, основанная на принципах исламских финансов',
@@ -382,6 +415,9 @@ export default {
   team: {
     title: 'Наша команда',
     subtitle: 'Наша профессиональная команда',
+    viewDetails: 'Подробнее',
+    professionalTeam: 'Профессиональная команда',
+    totalExperience: '25+ лет общего опыта',
     members: {
       mansur: {
         name: 'Мансур Мухиддинов',
