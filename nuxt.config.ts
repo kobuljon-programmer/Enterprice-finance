@@ -1,11 +1,24 @@
 const BACKEND_MODE = process.env.NUXT_BACKEND === "true";
+// Netlify sets `NETLIFY=true` during build; detect it to use Nitro's Netlify preset
+const IS_NETLIFY = process.env.NETLIFY === "true";
+
+// Choose Nitro preset based on desired backend mode and deployment platform:
+// - static: fully statically generated site (no server endpoints)
+// - netlify: Netlify Functions for server endpoints (use when deploying to Netlify and you need server/api)
+// - node-server: standard Node server for self-hosting
+const NITRO_CONFIG = BACKEND_MODE
+  ? IS_NETLIFY
+    ? { preset: "netlify" }
+    : { preset: "node-server" }
+  : { preset: "static" };
 
 export default defineNuxtConfig({
   // ✅ switchable
   ssr: BACKEND_MODE,
 
-  nitro: BACKEND_MODE ? { preset: "node-server" } : { preset: "static" },
+  nitro: NITRO_CONFIG,
 
+  // runtimeConfig: top-level keys are server-only; use `runtimeConfig.public` for client-exposed values
   runtimeConfig: {
     GOOGLE_SHEETS_SPREADSHEET_ID: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
     GOOGLE_SHEETS_TAB_NAME: process.env.GOOGLE_SHEETS_TAB_NAME,
