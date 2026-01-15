@@ -13,8 +13,9 @@ const NITRO_CONFIG = BACKEND_MODE
   : { preset: "static" };
 
 export default defineNuxtConfig({
-  // ✅ switchable
-  ssr: BACKEND_MODE,
+  // ✅ SSR disabled - use SPA mode for client-side rendering only
+  // API routes still work via Netlify Functions
+  ssr: false,
 
   nitro: NITRO_CONFIG,
 

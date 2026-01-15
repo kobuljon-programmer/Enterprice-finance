@@ -2,8 +2,19 @@
   command = "npm run build"
   publish = ".output/public"
 
+# Route API and server requests to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/index/:splat"
+  status = 200
+
 # SPA fallback - redirect all routes to index.html
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/index"
   status = 200
+
+# Netlify Functions configuration
+[functions]
+  directory = ".output/server"
+  node_bundler = "esbuild"
