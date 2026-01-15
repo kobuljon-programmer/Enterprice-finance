@@ -56,7 +56,7 @@ const formRules = {
     { required: true, message: t("form.required"), trigger: "change" },
     {
       validator: (rule, value, callback) => {
-        if (value < 300000000 || value > 1000000000) {
+        if (value < 3000000 || value > 1000000000) {
           callback(new Error(t("form.invalidAmount")));
         } else {
           callback();
@@ -143,7 +143,9 @@ const handleAmountInput = (value) => {
   // Store raw number
   formData.amount = digits ? Number(digits) : null;
   // Format for display with spaces as thousand separators
-  formattedAmount.value = digits ? Number(digits).toLocaleString("ru-RU").replace(/,/g, " ") : "";
+  formattedAmount.value = digits
+    ? Number(digits).toLocaleString("ru-RU").replace(/,/g, " ")
+    : "";
 };
 
 const formatAmountForSheet = (value) => {
@@ -242,9 +244,11 @@ const submitForm = async () => {
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900">
-                  {{ t('form.features.fastReview') }}
+                  {{ t("form.features.fastReview") }}
                 </h4>
-                <p class="text-sm text-gray-600">{{ t('form.features.fastReviewDesc') }}</p>
+                <p class="text-sm text-gray-600">
+                  {{ t("form.features.fastReviewDesc") }}
+                </p>
               </div>
             </div>
 
@@ -255,9 +259,11 @@ const submitForm = async () => {
                 <el-icon class="text-primary-600 text-xl"><Phone /></el-icon>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900">{{ t('form.features.freeConsultation') }}</h4>
+                <h4 class="font-semibold text-gray-900">
+                  {{ t("form.features.freeConsultation") }}
+                </h4>
                 <p class="text-sm text-gray-600">
-                  {{ t('form.features.freeConsultationDesc') }}
+                  {{ t("form.features.freeConsultationDesc") }}
                 </p>
               </div>
             </div>
@@ -269,9 +275,11 @@ const submitForm = async () => {
                 <el-icon class="text-secondary-600 text-xl"><Lock /></el-icon>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900">{{ t('form.features.secureData') }}</h4>
+                <h4 class="font-semibold text-gray-900">
+                  {{ t("form.features.secureData") }}
+                </h4>
                 <p class="text-sm text-gray-600">
-                  {{ t('form.features.secureDataDesc') }}
+                  {{ t("form.features.secureDataDesc") }}
                 </p>
               </div>
             </div>
@@ -281,7 +289,9 @@ const submitForm = async () => {
           <div
             class="bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl p-6 text-white"
           >
-            <h4 class="font-bold mb-4 text-secondary-100">{{ t('form.contactInfo.title') }}</h4>
+            <h4 class="font-bold mb-4 text-secondary-100">
+              {{ t("form.contactInfo.title") }}
+            </h4>
             <div class="space-y-3">
               <a
                 href="tel:+998712000000"
@@ -299,7 +309,7 @@ const submitForm = async () => {
               </a>
               <div class="flex items-center space-x-3">
                 <el-icon><Location /></el-icon>
-                <span>{{ t('form.contactInfo.address') }}</span>
+                <span>{{ t("form.contactInfo.address") }}</span>
               </div>
             </div>
           </div>
