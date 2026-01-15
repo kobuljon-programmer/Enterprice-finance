@@ -1,21 +1,19 @@
-export default defineNuxtConfig({
-  devtools: { enabled: true },
+const BACKEND_MODE = process.env.NUXT_BACKEND === "true";
 
-  // SSR mode - set to false for Netlify static hosting, true for Node.js server
-  ssr: false,
+export default defineNuxtConfig({
+  devtools: { enabled: false },
+
+  // SSR mode - set to false for static hosting (e.g., Netlify), true for Node.js server
+  ssr: BACKEND_MODE,
+  nitro: {
+    preset: BACKEND_MODE ? "node-server" : "static",
+  },
 
   // Modules
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/i18n',
-    '@vueuse/nuxt',
-  ],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@vueuse/nuxt"],
 
   // CSS - include Tailwind and Element Plus
-  css: [
-    'element-plus/dist/index.css',
-    '~/assets/styles/main.css',
-  ],
+  css: ["element-plus/dist/index.css", "~/assets/styles/main.css"],
 
   // PostCSS config for Tailwind
   postcss: {
@@ -38,24 +36,24 @@ export default defineNuxtConfig({
 
   // Element Plus transpile
   build: {
-    transpile: ['element-plus/es'],
+    transpile: ["element-plus/es"],
   },
 
   // i18n configuration
   i18n: {
     locales: [
-      { code: 'uz', name: "O'zbek", file: 'uz.js' },
-      { code: 'ru', name: 'Русский', file: 'ru.js' },
-      { code: 'en', name: 'English', file: 'en.js' },
+      { code: "uz", name: "O'zbek", file: "uz.js" },
+      { code: "ru", name: "Русский", file: "ru.js" },
+      { code: "en", name: "English", file: "en.js" },
     ],
-    defaultLocale: 'uz',
+    defaultLocale: "uz",
     lazy: true,
-    langDir: 'i18n/locales',
-    strategy: 'no_prefix',
+    langDir: "i18n/locales",
+    strategy: "no_prefix",
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18n_locale',
-      redirectOn: 'root',
+      cookieKey: "i18n_locale",
+      redirectOn: "root",
     },
     bundle: {
       optimizeTranslationDirective: false,
@@ -69,26 +67,29 @@ export default defineNuxtConfig({
   // App configuration
   app: {
     head: {
-      htmlAttrs: { lang: 'uz' },
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: { lang: "uz" },
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1",
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
         {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap'
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap",
         },
       ],
     },
   },
 
-  // Nitro configuration
-  // Use 'static' for Netlify, 'node-server' for your own hosting
+  // Nitro configuration - controlled by NUXT_BACKEND env variable
   nitro: {
-    preset: 'static',
+    preset: BACKEND_MODE ? "node-server" : "static",
   },
 
-  compatibilityDate: '2024-11-01',
-})
+  compatibilityDate: "2024-11-01",
+});
