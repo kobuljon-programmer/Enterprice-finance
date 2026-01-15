@@ -1,0 +1,98 @@
+name: Deploy to ahost.uz
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project with backend
+        env:
+          NUXT_BACKEND: "true"
+        run: npm run build
+
+      - name: Create deployment archive
+        run: tar -czf enterprise-finance-build.tar.gz .output node_modules package.json package-lock.json
+
+      - name: Upload artifact to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-archive
+          path: enterprise-finance-build.tar.gz
+          retention-days: 7
+
+      - name: Deploy to ahost.uz
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AHOST_HOST }}
+          username: ${{ secrets.AHOST_USER }}
+          key: ${{ secrets.AHOST_SSH_KEY }}
+          port: 22
+          script: |
+            # Navigate to project directory
+            cd ~/public_html/enterprise-finance || mkdir -p ~/public_html/enterprise-finance && cd ~/public_html/enterprise-finance
+
+            echo "📦 Stopping current app..."
+            pm2 stop enterprise-finance 2>/dev/null || echo "App not running yet"
+
+            echo "🗑️  Removing old build..."
+            rm -rf .output node_modules enterprise-finance-build.tar.gz
+
+            echo "⬇️  Downloading new build..."
+            # Download the artifact from GitHub Actions
+            # Alternative: manually upload build to GitHub releases and download from there
+            # For now, we'll assume you uploaded it manually or use git pull
+
+            echo "📝 If using Git pull method (requires git installed):"
+            git pull origin main 2>/dev/null || echo "⚠️ Git pull failed - ensure git is installed"
+
+            echo "📦 Installing dependencies..."
+            npm install --production 2>/dev/null || npm install
+
+            echo "🔨 Building project..."
+            NUXT_BACKEND=true npm run build
+
+            echo "🚀 Starting app with PM2..."
+            pm2 delete enterprise-finance 2>/dev/null || true
+            pm2 start .output/server/index.mjs --name enterprise-finance --env-file .env
+            pm2 save
+
+            echo "✅ Deployment complete!"
+            pm2 status
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AHOST_HOST }}
+          username: ${{ secrets.AHOST_USER }}
+          key: ${{ secrets.AHOST_SSH_KEY }}
+          port: 22
+          script: |
+            echo "🔍 Checking app status..."
+            pm2 status enterprise-finance
+
+            echo "📋 Viewing recent logs..."
+            pm2 logs enterprise-finance --lines 20 --nostream
+
+      - name: Deployment Success
+        if: success()
+        run: echo "✅ Successfully deployed to ahost.uz!"
+
+      - name: Deployment Failed
+        if: failure()
+        run: echo "❌ Deployment to ahost.uz failed. Check SSH secrets and ahost.uz setup."

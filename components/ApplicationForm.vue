@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
+import { ElMessage } from "element-plus";
 
 const { t, locale } = useI18n();
 
@@ -165,7 +166,7 @@ const submitForm = async () => {
 
   isSubmitting.value = true;
   try {
-    await $fetch("/api/lead", {
+    const response = await $fetch("/api/lead", {
       method: "POST",
       body: {
         fullName: formData.fullName,
@@ -178,20 +179,53 @@ const submitForm = async () => {
       },
     });
 
-    isSuccess.value = true;
-    setTimeout(() => {
-      isSuccess.value = false;
-      currentStep.value = 0;
-      formattedAmount.value = "";
-      Object.assign(formData, {
-        fullName: "",
-        phone: "",
-        amount: null,
-        product: "",
-      });
-    }, 5000);
-  } catch (e) {
-    console.error(e);
+    // Verify API response
+    if (response && response.ok === true) {
+      isSuccess.value = true;
+      ElMessage.success(t("form.successMessage") || "Arizangiz qabul qilindi!");
+
+      setTimeout(() => {
+        isSuccess.value = false;
+        currentStep.value = 0;
+        formattedAmount.value = "";
+        Object.assign(formData, {
+          fullName: "",
+          phone: "",
+          amount: null,
+          product: "",
+        });
+      }, 5000);
+    } else {
+      // API returned error response
+      const errorMsg =
+        response?.message || "Xatolik yuz berdi. Iltimos qayta urinib ko'ring.";
+      ElMessage.error(errorMsg);
+      console.error("API returned error:", response);
+    }
+  } catch (error) {
+    console.error("Form submission error:", error);
+
+    // Handle network or validation errors
+    let errorMessage = "Xatolik yuz berdi. Iltimos qayta urinib ko'ring.";
+
+    if (error.data?.message) {
+      errorMessage = error.data.message;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+
+    // Special handling for common errors
+    if (error.status === 429) {
+      errorMessage =
+        "Juda ko'p so'rovlar. Biroz vaqt o'tkazib yana urinib ko'ring.";
+    } else if (error.status === 400) {
+      errorMessage = "Noto'g'ri ma'lumot. Iltimos formani tekshiring.";
+    } else if (error.status === 500) {
+      errorMessage =
+        "Server xatosi. Iltimos biroz vaqt o'tkazib yana urinib ko'ring.";
+    }
+
+    ElMessage.error(errorMessage);
   } finally {
     isSubmitting.value = false;
   }
