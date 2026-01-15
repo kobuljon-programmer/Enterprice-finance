@@ -39,7 +39,7 @@ const scrollToProducts = () => {
           <!-- Badge -->
           <div class="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-primary-100 mb-6">
             <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-            <span class="text-sm font-medium text-gray-700">Islomiy moliya</span>
+            <span class="text-sm font-medium text-gray-700">{{ t('hero.badge') }}</span>
           </div>
 
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-4">
@@ -80,15 +80,15 @@ const scrollToProducts = () => {
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-10 pt-8 border-t border-gray-200/50">
             <div class="flex items-center space-x-2">
               <el-icon class="text-primary-500 text-xl"><Shield /></el-icon>
-              <span class="text-sm text-gray-600">Shariatga muvofiq</span>
+              <span class="text-sm text-gray-600">{{ t('hero.shariahCompliant') }}</span>
             </div>
             <div class="flex items-center space-x-2">
               <el-icon class="text-primary-500 text-xl"><OfficeBuilding /></el-icon>
-              <span class="text-sm text-gray-600">Rasmiy litsenziya</span>
+              <span class="text-sm text-gray-600">{{ t('hero.officialLicense') }}</span>
             </div>
             <div class="flex items-center space-x-2">
               <el-icon class="text-primary-500 text-xl"><User /></el-icon>
-              <span class="text-sm text-gray-600">1000+ mijoz</span>
+              <span class="text-sm text-gray-600">{{ t('about.clients') }}</span>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@ const scrollToProducts = () => {
             <div class="bg-white rounded-3xl shadow-2xl p-8 transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <div class="flex items-center justify-between mb-6">
                 <div>
-                  <p class="text-sm text-gray-500 mb-1">Moliyalashtirish</p>
+                  <p class="text-sm text-gray-500 mb-1">{{ t('hero.card.financing') }}</p>
                   <p class="text-2xl font-bold text-gray-900">500,000,000 UZS</p>
                 </div>
                 <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center">
@@ -110,16 +110,16 @@ const scrollToProducts = () => {
 
               <div class="space-y-4">
                 <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                  <span class="text-gray-600">Tur</span>
+                  <span class="text-gray-600">{{ t('hero.card.type') }}</span>
                   <span class="font-semibold text-primary-600">Murabaha</span>
                 </div>
                 <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                  <span class="text-gray-600">Muddat</span>
-                  <span class="font-semibold text-gray-900">12 oy</span>
+                  <span class="text-gray-600">{{ t('hero.card.term') }}</span>
+                  <span class="font-semibold text-gray-900">{{ t('hero.card.months') }}</span>
                 </div>
                 <div class="flex items-center justify-between py-3">
-                  <span class="text-gray-600">Ustama</span>
-                  <span class="font-semibold text-green-600">24% yillik</span>
+                  <span class="text-gray-600">{{ t('hero.card.markup') }}</span>
+                  <span class="font-semibold text-green-600">{{ t('hero.annualRate') }}</span>
                 </div>
               </div>
 
@@ -130,7 +130,7 @@ const scrollToProducts = () => {
                     <div class="w-8 h-8 rounded-full bg-secondary-100 border-2 border-white"></div>
                     <div class="w-8 h-8 rounded-full bg-green-100 border-2 border-white"></div>
                   </div>
-                  <p class="text-sm text-gray-500">1000+ muvaffaqiyatli loyihalar</p>
+                  <p class="text-sm text-gray-500">{{ t('hero.card.successfulProjects') }}</p>
                 </div>
               </div>
             </div>
@@ -142,8 +142,8 @@ const scrollToProducts = () => {
                   <el-icon class="text-green-600"><Check /></el-icon>
                 </div>
                 <div>
-                  <p class="text-xs text-gray-500">Holat</p>
-                  <p class="text-sm font-semibold text-green-600">Tasdiqlangan</p>
+                  <p class="text-xs text-gray-500">{{ t('hero.card.status') }}</p>
+                  <p class="text-sm font-semibold text-green-600">{{ t('hero.card.approved') }}</p>
                 </div>
               </div>
             </div>
@@ -154,8 +154,8 @@ const scrollToProducts = () => {
                   <el-icon class="text-primary-600"><Timer /></el-icon>
                 </div>
                 <div>
-                  <p class="text-xs text-gray-500">Ariza ko'rib chiqish</p>
-                  <p class="text-sm font-semibold text-primary-600">24 soat</p>
+                  <p class="text-xs text-gray-500">{{ t('hero.card.applicationReview') }}</p>
+                  <p class="text-sm font-semibold text-primary-600">{{ t('hero.responseTime') }}</p>
                 </div>
               </div>
             </div>

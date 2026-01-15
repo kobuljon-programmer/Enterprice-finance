@@ -20,6 +20,22 @@ export default {
       "Shariatga muvofiq moliyalashtirish xizmatlari orqali biznesingizni rivojlantiring",
     cta: "Hoziroq murojaat qiling",
     learnMore: "Batafsil",
+    annualRate: "24% yillik",
+    responseTime: "24 soat",
+    card: {
+      financing: "Moliyalashtirish",
+      type: "Tur",
+      term: "Muddat",
+      months: "12 oy",
+      markup: "Ustama",
+      successfulProjects: "1000+ muvaffaqiyatli loyihalar",
+      status: "Holat",
+      approved: "Tasdiqlangan",
+      applicationReview: "Ariza ko'rib chiqish",
+    },
+    badge: "Islomiy moliya",
+    shariahCompliant: "Shariatga muvofiq",
+    officialLicense: "Rasmiy litsenziya",
   },
   about: {
     title: "Biz haqimizda",
@@ -34,6 +50,9 @@ export default {
     clientsText: "Mamnun mijozlar",
     trust: "Ishonch",
     trustText: "Islomiy moliya tamoyillari asosida",
+    fastService: "Tezkor xizmat",
+    fastServiceDesc: "24 soat ichida arizani ko'rib chiqish",
+    clientTrust: "Mijozlar ishonchi",
   },
   products: {
     title: "Mahsulotlarimiz",
@@ -309,6 +328,7 @@ export default {
         },
       },
     },
+    consultation: "Qaysi mahsulot sizga mos keladi? Biz bilan maslahatlashing!",
   },
   matrix: {
     title: "Moliyalashtirish shartlari",
@@ -320,9 +340,10 @@ export default {
     term: "Muddat",
     termValue: "3 – 24 oy",
     collateral: "Garov",
-    collateralValue: "Ko'chmas mulki yoki Avtotransport",
-    property: "Ko'chmas mulk",
+    collateralValue: "Noturar joy mulki yoki Avtotransport",
+    property: "Noturar joy mulki",
     vehicles: "Avtotransport",
+    collateralTypes: "Qabul qilinadigan garov turlari",
   },
   roadmap: {
     title: "Murabaha jarayoni",
@@ -389,6 +410,18 @@ export default {
     },
     next: "Keyingi",
     prev: "Oldingi",
+    features: {
+      fastReview: "Tezkor ko'rib chiqish",
+      fastReviewDesc: "24 soat ichida javob olasiz",
+      freeConsultation: "Bepul maslahat",
+      freeConsultationDesc: "Mutaxassislarimiz yordam beradi",
+      secureData: "Xavfsiz ma'lumotlar",
+      secureDataDesc: "Sizning ma'lumotlaringiz himoyalangan",
+    },
+    contactInfo: {
+      title: "Bog'lanish uchun",
+      address: "Toshkent sh., Amir Temur ko'chasi",
+    },
   },
   footer: {
     description:
@@ -405,6 +438,9 @@ export default {
   team: {
     title: "Jamoa tarkibi",
     subtitle: "Bizning professional jamoamiz",
+    viewDetails: "Batafsil",
+    professionalTeam: "Professional jamoa",
+    totalExperience: "25+ yillik umumiy tajriba",
     members: {
       mansur: {
         name: "Mansur Muxiddinov",

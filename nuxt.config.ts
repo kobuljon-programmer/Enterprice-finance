@@ -1,13 +1,39 @@
 const BACKEND_MODE = process.env.NUXT_BACKEND === "true";
+// Netlify sets `NETLIFY=true` during build; detect it to use Nitro's Netlify preset
+const IS_NETLIFY = process.env.NETLIFY === "true";
+
+// Choose Nitro preset based on desired backend mode and deployment platform:
+// - static: fully statically generated site (no server endpoints)
+// - netlify: Netlify Functions for server endpoints (use when deploying to Netlify and you need server/api)
+// - node-server: standard Node server for self-hosting
+const NITRO_CONFIG = BACKEND_MODE
+  ? IS_NETLIFY
+    ? { preset: "netlify" }
+    : { preset: "node-server" }
+  : { preset: "static" };
 
 export default defineNuxtConfig({
+  // ✅ switchable
+  ssr: BACKEND_MODE,
+
+  nitro: NITRO_CONFIG,
+
+  // runtimeConfig: top-level keys are server-only; use `runtimeConfig.public` for client-exposed values
+  runtimeConfig: {
+    GOOGLE_SHEETS_SPREADSHEET_ID: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
+    GOOGLE_SHEETS_TAB_NAME: process.env.GOOGLE_SHEETS_TAB_NAME,
+
+    GOOGLE_SERVICE_ACCOUNT_EMAIL: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY:
+      process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
+  },
   devtools: { enabled: false },
 
-  // SSR mode - set to false for static hosting (e.g., Netlify), true for Node.js server
-  ssr: BACKEND_MODE,
-  nitro: {
-    preset: BACKEND_MODE ? "node-server" : "static",
-  },
+  // SSR mode - set to false for Netlify static hosting, true for Node.js server
+  // ssr: false,
 
   // Modules
   modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@vueuse/nuxt"],
@@ -31,6 +57,9 @@ export default defineNuxtConfig({
           additionalData: `@use "~/assets/styles/element/index.scss" as *;`,
         },
       },
+    },
+    server: {
+      hmr: false,
     },
   },
 
@@ -86,10 +115,11 @@ export default defineNuxtConfig({
     },
   },
 
-  // Nitro configuration - controlled by NUXT_BACKEND env variable
-  nitro: {
-    preset: BACKEND_MODE ? "node-server" : "static",
-  },
+  // Nitro configuration
+  // Use 'static' for Netlify, 'node-server' for your own hosting
+  // nitro: {
+  //   preset: "static",
+  // },
 
   compatibilityDate: "2024-11-01",
 });

@@ -15,6 +15,18 @@ declare module 'nuxt/schema' {
 
       cdnURL: string,
    },
+
+   GOOGLE_SHEETS_SPREADSHEET_ID: string,
+
+   GOOGLE_SHEETS_TAB_NAME: string,
+
+   GOOGLE_SERVICE_ACCOUNT_EMAIL: string,
+
+   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: string,
+
+   TELEGRAM_BOT_TOKEN: string,
+
+   TELEGRAM_CHAT_ID: string,
   }
   interface PublicRuntimeConfig {
    i18n: {

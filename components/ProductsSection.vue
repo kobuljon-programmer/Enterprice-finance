@@ -142,7 +142,7 @@ const closeProductDetail = () => {
 
       <!-- Bottom CTA -->
       <div class="text-center mt-16">
-        <p class="text-gray-600 mb-6">Qaysi mahsulot sizga mos keladi? Biz bilan maslahatlashing!</p>
+        <p class="text-gray-600 mb-6">{{ t('products.consultation') }}</p>
         <el-button
           type="danger"
           size="large"
