@@ -10,7 +10,8 @@ import 'node:url';
 const LeadSchema = z.object({
   fullName: z.string().min(3),
   phone: z.string().min(7),
-  amount: z.number().min(3e8).max(1e9),
+  entityType: z.enum(["physical", "legal"]),
+  amount: z.number().min(3e6).max(15e8),
   productLabel: z.string().min(1),
   // localized
   locale: z.string().optional(),
@@ -98,6 +99,7 @@ const lead_post = defineEventHandler(async (event) => {
   });
   const phoneText = "'" + data.phone;
   const formattedAmount = data.amount.toLocaleString("ru-RU").replace(/\s/g, " ");
+  const entityTypeLabel = data.entityType === "physical" ? "Jismoniy shaxs" : "Yuridik shaxs";
   try {
     await appendToSheet({
       spreadsheetId,
@@ -108,6 +110,7 @@ const lead_post = defineEventHandler(async (event) => {
         timestamp,
         data.fullName,
         phoneText,
+        entityTypeLabel,
         formattedAmount,
         data.productLabel,
         data.locale || "",
@@ -125,10 +128,11 @@ const lead_post = defineEventHandler(async (event) => {
     };
   }
   if (tgToken && tgChatId) {
-    const text = `\u{1F195} New lead
+    const text = `\u{1F195} Yangi ariza
 
 \u{1F464} ${data.fullName}
 \u{1F4DE} ${data.phone}
+\u{1F3E2} ${entityTypeLabel}
 \u{1F4B0} ${formattedAmount} UZS
 \u{1F4E6} ${data.productLabel}
 \u{1F310} ${data.page || "-"}`;

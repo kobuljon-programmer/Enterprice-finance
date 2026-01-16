@@ -4,7 +4,8 @@ import { z } from "zod";
 const LeadSchema = z.object({
   fullName: z.string().min(3),
   phone: z.string().min(7),
-  amount: z.number().min(300_000_000).max(1_000_000_000),
+  entityType: z.enum(["physical", "legal"]),
+  amount: z.number().min(3_000_000).max(1_500_000_000),
   productLabel: z.string().min(1), // localized
   locale: z.string().optional(),
   page: z.string().optional(),
@@ -120,6 +121,10 @@ export default defineEventHandler(async (event) => {
 
   // Format amount with spaces for readability (e.g., 300 000 000)
   const formattedAmount = data.amount.toLocaleString("ru-RU").replace(/\s/g, " ");
+
+  // Map entity type to readable label
+  const entityTypeLabel = data.entityType === "physical" ? "Jismoniy shaxs" : "Yuridik shaxs";
+
   // Try to append to Google Sheets and notify Telegram; surface helpful errors
   try {
     await appendToSheet({
@@ -131,6 +136,7 @@ export default defineEventHandler(async (event) => {
         timestamp,
         data.fullName,
         phoneText,
+        entityTypeLabel,
         formattedAmount,
         data.productLabel,
         data.locale || "",
@@ -151,9 +157,10 @@ export default defineEventHandler(async (event) => {
 
   if (tgToken && tgChatId) {
     const text =
-      "🆕 New lead\n\n" +
+      "🆕 Yangi ariza\n\n" +
       `👤 ${data.fullName}\n` +
       `📞 ${data.phone}\n` +
+      `🏢 ${entityTypeLabel}\n` +
       `💰 ${formattedAmount} UZS\n` +
       `📦 ${data.productLabel}\n` +
       `🌐 ${data.page || "-"}`;

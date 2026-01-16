@@ -10,8 +10,30 @@ const isSuccess = ref(false);
 const formData = reactive({
   fullName: "",
   phone: "",
+  entityType: "",
   amount: null,
   product: "",
+});
+
+const entityTypes = computed(() => [
+  {
+    value: "physical",
+    label: t("form.entityTypes.physical"),
+  },
+  {
+    value: "legal",
+    label: t("form.entityTypes.legal"),
+  },
+]);
+
+// Limits based on entity type
+const amountLimits = computed(() => {
+  if (formData.entityType === "physical") {
+    return { min: 3000000, max: 100000000 }; // 3 mln - 100 mln
+  } else if (formData.entityType === "legal") {
+    return { min: 3000000, max: 1500000000 }; // 3 mln - 1.5 mlrd
+  }
+  return { min: 3000000, max: 1500000000 }; // default
 });
 
 const products = computed(() => [
@@ -39,7 +61,7 @@ const steps = computed(() => [
   { title: t("form.steps.details"), icon: "Document" },
 ]);
 
-const formRules = {
+const formRules = computed(() => ({
   fullName: [
     { required: true, message: t("form.required"), trigger: "blur" },
     { min: 3, message: "Kamida 3 ta belgi", trigger: "blur" },
@@ -52,12 +74,20 @@ const formRules = {
       trigger: "blur",
     },
   ],
+  entityType: [
+    { required: true, message: t("form.required"), trigger: "change" },
+  ],
   amount: [
     { required: true, message: t("form.required"), trigger: "change" },
     {
       validator: (rule, value, callback) => {
-        if (value < 3000000 || value > 1000000000) {
-          callback(new Error(t("form.invalidAmount")));
+        const limits = amountLimits.value;
+        if (value < limits.min || value > limits.max) {
+          const errorMsg =
+            formData.entityType === "physical"
+              ? t("form.invalidAmountPhysical")
+              : t("form.invalidAmountLegal");
+          callback(new Error(errorMsg));
         } else {
           callback();
         }
@@ -66,7 +96,7 @@ const formRules = {
     },
   ],
   product: [{ required: true, message: t("form.required"), trigger: "change" }],
-};
+}));
 
 const formRef = ref(null);
 const step1Ref = ref(null);
@@ -170,6 +200,7 @@ const submitForm = async () => {
       body: {
         fullName: formData.fullName,
         phone: formData.phone,
+        entityType: formData.entityType,
         amount: Number(formData.amount),
         productLabel: productLabel.value, // ✅ localized text
         locale: locale.value,
@@ -186,6 +217,7 @@ const submitForm = async () => {
       Object.assign(formData, {
         fullName: "",
         phone: "",
+        entityType: "",
         amount: null,
         product: "",
       });
@@ -294,18 +326,18 @@ const submitForm = async () => {
             </h4>
             <div class="space-y-3">
               <a
-                href="tel:+998712000000"
+                href="tel:+998552555115"
                 class="flex items-center space-x-3 hover:text-primary-100 transition-colors"
               >
                 <el-icon><Phone /></el-icon>
-                <span>+998 71 200 00 00</span>
+                <span>+998 55 255 51 15</span>
               </a>
               <a
-                href="mailto:info@enterprise.uz"
+                href="mailto:enterprisefinance@yandex.com"
                 class="flex items-center space-x-3 hover:text-primary-100 transition-colors"
               >
                 <el-icon><Message /></el-icon>
-                <span>info@enterprise.uz</span>
+                <span>enterprisefinance@yandex.com</span>
               </a>
               <div class="flex items-center space-x-3">
                 <el-icon><Location /></el-icon>
@@ -390,6 +422,7 @@ const submitForm = async () => {
                   :model="formData"
                   :rules="formRules"
                   label-position="top"
+                  @submit.prevent="nextStep"
                 >
                   <el-form-item :label="t('form.fullName')" prop="fullName">
                     <el-input
@@ -397,6 +430,7 @@ const submitForm = async () => {
                       :placeholder="t('form.fullNamePlaceholder')"
                       size="large"
                       class="!rounded-xl"
+                      @keyup.enter="nextStep"
                     >
                       <template #prefix>
                         <el-icon class="text-gray-400"><User /></el-icon>
@@ -423,6 +457,7 @@ const submitForm = async () => {
                   :model="formData"
                   :rules="formRules"
                   label-position="top"
+                  @submit.prevent="nextStep"
                 >
                   <el-form-item :label="t('form.phone')" prop="phone">
                     <el-input
@@ -430,6 +465,7 @@ const submitForm = async () => {
                       :placeholder="t('form.phonePlaceholder')"
                       size="large"
                       @input="handlePhoneInput"
+                      @keyup.enter="nextStep"
                     >
                       <template #prefix>
                         <el-icon class="text-gray-400"><Phone /></el-icon>
@@ -456,12 +492,40 @@ const submitForm = async () => {
                   :model="formData"
                   :rules="formRules"
                   label-position="top"
+                  @submit.prevent="submitForm"
                 >
+                  <el-form-item :label="t('form.entityType')" prop="entityType">
+                    <el-select
+                      v-model="formData.entityType"
+                      :placeholder="t('form.entityTypePlaceholder')"
+                      size="large"
+                      class="!w-full"
+                    >
+                      <el-option
+                        v-for="option in entityTypes"
+                        :key="option.value"
+                        :label="option.label"
+                        :value="option.value"
+                      />
+                    </el-select>
+                    <div
+                      v-if="formData.entityType"
+                      class="mt-2 text-sm text-gray-500"
+                    >
+                      {{
+                        formData.entityType === "physical"
+                          ? t("form.limitPhysical")
+                          : t("form.limitLegal")
+                      }}
+                    </div>
+                  </el-form-item>
+
                   <el-form-item :label="t('form.amount')" prop="amount">
                     <el-input
                       v-model="formattedAmount"
                       :placeholder="t('form.amountPlaceholder')"
                       size="large"
+                      :disabled="!formData.entityType"
                       @input="handleAmountInput"
                     >
                       <template #prefix>

@@ -83,8 +83,28 @@ const closeModal = () => {
           :key="member.id"
           class="group bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden border border-gray-100"
         >
-          <!-- Team member photo -->
-          <div class="relative h-56 overflow-hidden bg-gradient-to-b from-gray-100 to-gray-50">
+          <!-- Team member photo - circular on mobile, rectangular on desktop -->
+          <!-- Mobile: Circular image -->
+          <div class="md:hidden flex justify-center pt-6 pb-4 bg-gradient-to-b from-gray-50 to-white">
+            <div
+              class="w-32 h-32 rounded-full overflow-hidden border-4 shadow-lg"
+              :class="{
+                'border-primary-200': member.color === 'primary',
+                'border-secondary-200': member.color === 'secondary',
+                'border-green-200': member.color === 'green',
+                'border-purple-200': member.color === 'purple',
+              }"
+            >
+              <img
+                :src="member.image"
+                :alt="t(`team.members.${member.id}.name`)"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+
+          <!-- Desktop: Original rectangular image -->
+          <div class="hidden md:block relative h-56 overflow-hidden bg-gradient-to-b from-gray-100 to-gray-50">
             <img
               :src="member.image"
               :alt="t(`team.members.${member.id}.name`)"
