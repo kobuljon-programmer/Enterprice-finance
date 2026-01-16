@@ -175,7 +175,7 @@ const scrollToSection = (href) => {
             class="text-gray-500 text-sm text-center md:text-right flex items-center space-x-2"
           >
             <el-icon class="text-primary-400"><Shield /></el-icon>
-            <span class="w-max">{{ t("footer.license") }}</span>
+            <span>{{ t("footer.license") }}</span>
           </p>
         </div>
       </div>
