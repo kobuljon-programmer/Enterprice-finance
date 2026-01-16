@@ -1,16 +1,22 @@
 const BACKEND_MODE = process.env.NUXT_BACKEND === "true";
 // Netlify sets `NETLIFY=true` during build; detect it to use Nitro's Netlify preset
 const IS_NETLIFY = process.env.NETLIFY === "true";
+// Vercel sets `VERCEL=1` during build
+const IS_VERCEL = process.env.VERCEL === "1";
 
 // Choose Nitro preset based on desired backend mode and deployment platform:
 // - static: fully statically generated site (no server endpoints)
+// - vercel: Vercel serverless functions
 // - netlify: Netlify Functions for server endpoints (use when deploying to Netlify and you need server/api)
 // - node-server: standard Node server for self-hosting
-const NITRO_CONFIG = BACKEND_MODE
-  ? IS_NETLIFY
-    ? { preset: "netlify" }
-    : { preset: "node-server" }
-  : { preset: "static" };
+const getNitroPreset = () => {
+  if (IS_VERCEL) return { preset: "vercel" };
+  if (IS_NETLIFY && BACKEND_MODE) return { preset: "netlify" };
+  if (BACKEND_MODE) return { preset: "node-server" };
+  return { preset: "static" };
+};
+
+const NITRO_CONFIG = getNitroPreset();
 
 export default defineNuxtConfig({
   // ✅ SSR disabled - use SPA mode for client-side rendering only
