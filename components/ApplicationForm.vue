@@ -31,9 +31,9 @@ const amountLimits = computed(() => {
   if (formData.entityType === "physical") {
     return { min: 3000000, max: 100000000 }; // 3 mln - 100 mln
   } else if (formData.entityType === "legal") {
-    return { min: 3000000, max: 1500000000 }; // 3 mln - 1.5 mlrd
+    return { min: 3000000, max: 300000000 }; // 3 mln - 300 mln
   }
-  return { min: 3000000, max: 1500000000 }; // default
+  return { min: 3000000, max: 300000000 }; // default
 });
 
 const products = computed(() => [
